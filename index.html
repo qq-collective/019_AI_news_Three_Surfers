@@ -3,148 +3,332 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>みんなのAIニュース — Echo / Lucky / Sonar</title>
+<title>AI News: Three Surfers</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap');
 
-:root{--bg:#f5f3ee;--surface:#fff;--surface2:#f0ede6;--border:rgba(0,0,0,.08);--text:#1c1a16;--text-mid:#5a5548;--text-dim:#9a9285;--ch:#2a6b9c;--ch-light:#e8f2fa;--ch-mid:#b8d4ea;--ch-bg:#f0f6fb;}
-[data-ch="nikkei"]{--ch:#2a6b9c;--ch-light:#e8f2fa;--ch-mid:#b8d4ea;--ch-bg:#f0f6fb;}
-[data-ch="tech"]  {--ch:#1a7a5e;--ch-light:#e6f4ef;--ch-mid:#a8d8c8;--ch-bg:#eef8f4;}
-[data-ch="gossip"]{--ch:#8a3a6e;--ch-light:#f5e8f0;--ch-mid:#d8a8c8;--ch-bg:#faf0f6;}
+:root{
+  --bg:#f5f3ee;--surface:#fff;--surface2:#f0ede6;
+  --border:rgba(0,0,0,.08);--text:#1c1a16;--text-mid:#5a5548;--text-dim:#9a9285;
+  --ch:#2a6b9c;--ch-light:#e8f2fa;--ch-mid:#b8d4ea;--ch-bg:#f0f6fb;
+}
+[data-ch="map"]   {--ch:#2a6b9c;--ch-light:#e8f2fa;--ch-mid:#b8d4ea;--ch-bg:#f0f6fb;}
+[data-ch="field"] {--ch:#1a7a5e;--ch-light:#e6f4ef;--ch-mid:#a8d8c8;--ch-bg:#eef8f4;}
+[data-ch="agent"] {--ch:#7a3a8e;--ch-light:#f0e8f8;--ch-mid:#cca8dc;--ch-bg:#f8f0fc;}
+
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;min-height:100vh;}
 
-header{background:var(--surface);border-bottom:1px solid var(--border);padding:.85rem 1rem 0;position:sticky;top:0;z-index:200;box-shadow:0 1px 8px rgba(0,0,0,.04);}
-.header-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;}
-.echo-avatar{font-size:1.45rem;animation:bob 3s ease-in-out infinite;}
+/* ===== HEADER ===== */
+header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:.9rem 1rem 0;position:sticky;top:0;z-index:200;
+  box-shadow:0 1px 10px rgba(0,0,0,.05);
+}
+.header-top{display:flex;align-items:center;gap:.65rem;margin-bottom:.75rem;}
+.cast-avatar{font-size:1.5rem;animation:bob 3s ease-in-out infinite;flex-shrink:0;}
 @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
-.header-text h1{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--ch);transition:color .4s;letter-spacing:.02em;}
-.header-text p{font-size:.6rem;color:var(--text-dim);letter-spacing:.1em;margin-top:1px;}
-.header-right{margin-left:auto;display:flex;gap:.3rem;align-items:center;}
-.policy-btn{background:transparent;border:1px solid var(--border);border-radius:6px;padding:.22rem .5rem;font-size:.58rem;color:var(--text-dim);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all .15s;white-space:nowrap;}
-.policy-btn:hover{border-color:var(--ch);color:var(--ch);}
+.header-text{}
+.header-text h1{
+  font-family:'DM Serif Display',serif;font-size:1.15rem;
+  color:var(--text);letter-spacing:.01em;line-height:1.2;
+}
+.header-text h1 span{color:var(--ch);transition:color .4s;}
+.header-tagline{font-size:.6rem;color:var(--text-dim);letter-spacing:.1em;margin-top:2px;}
+.header-right{margin-left:auto;display:flex;gap:.3rem;align-items:center;flex-shrink:0;}
+.icon-btn{
+  background:transparent;border:1px solid var(--border);border-radius:7px;
+  padding:.24rem .5rem;font-size:.58rem;color:var(--text-dim);cursor:pointer;
+  font-family:'Noto Sans JP',sans-serif;transition:all .15s;white-space:nowrap;
+}
+.icon-btn:hover{border-color:var(--ch);color:var(--ch);}
 
+/* CHANNEL TABS */
 .ch-tabs{display:flex;border-top:1px solid var(--border);margin:0 -1rem;}
-.ch-tab{flex:1;padding:.42rem .2rem;text-align:center;font-size:.63rem;font-weight:700;letter-spacing:.04em;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-dim);transition:all .2s;white-space:nowrap;}
+.ch-tab{
+  flex:1;padding:.44rem .2rem;text-align:center;font-size:.62rem;font-weight:700;
+  letter-spacing:.03em;cursor:pointer;border-bottom:2.5px solid transparent;
+  color:var(--text-dim);transition:all .2s;white-space:nowrap;line-height:1.3;
+}
 .ch-tab.active{color:var(--ch);border-bottom-color:var(--ch);}
 .ch-tab:hover:not(.active){color:var(--text-mid);background:var(--surface2);}
 
-.sub-bar{background:var(--ch-bg);border-bottom:1px solid var(--border);padding:.45rem 1rem;display:flex;gap:.4rem;align-items:center;transition:background .4s;flex-wrap:wrap;}
-.mode-btn{flex:1;min-width:0;padding:.34rem .4rem;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text-mid);font-size:.68rem;font-family:'Noto Sans JP',sans-serif;cursor:pointer;transition:all .2s;text-align:center;white-space:nowrap;}
+/* SUB BAR */
+.sub-bar{
+  background:var(--ch-bg);border-bottom:1px solid var(--border);
+  padding:.45rem 1rem;display:flex;gap:.4rem;align-items:center;
+  transition:background .4s;flex-wrap:wrap;
+}
+.mode-btn{
+  flex:1;min-width:0;padding:.34rem .4rem;border-radius:8px;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--text-mid);font-size:.68rem;font-family:'Noto Sans JP',sans-serif;
+  cursor:pointer;transition:all .2s;text-align:center;white-space:nowrap;
+}
 .mode-btn.active{background:var(--ch);color:#fff;border-color:var(--ch);}
-.region-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-left:auto;flex-shrink:0;}
-.region-btn{padding:.3rem .52rem;font-size:.62rem;background:var(--surface);border:none;cursor:pointer;color:var(--text-dim);font-family:'Noto Sans JP',sans-serif;transition:all .2s;white-space:nowrap;}
+.region-toggle{
+  display:flex;border:1px solid var(--border);border-radius:8px;
+  overflow:hidden;margin-left:auto;flex-shrink:0;
+}
+.region-btn{
+  padding:.3rem .52rem;font-size:.62rem;background:var(--surface);
+  border:none;cursor:pointer;color:var(--text-dim);
+  font-family:'Noto Sans JP',sans-serif;transition:all .2s;white-space:nowrap;
+}
 .region-btn.active{background:var(--ch);color:#fff;}
 
-main{max-width:620px;margin:0 auto;padding:1rem 1rem 5rem;}
+/* MAIN */
+main{max-width:620px;margin:0 auto;padding:.9rem 1rem 5rem;}
 
-.api-bar{display:flex;gap:.4rem;margin-bottom:.75rem;}
-.api-bar input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.4rem .7rem;color:var(--text);font-size:.7rem;font-family:monospace;outline:none;}
+/* API BAR */
+.api-bar{display:flex;gap:.4rem;margin-bottom:.8rem;}
+.api-bar input{
+  flex:1;background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:.42rem .75rem;color:var(--text);
+  font-size:.7rem;font-family:monospace;outline:none;
+  transition:border-color .2s;
+}
 .api-bar input:focus{border-color:var(--ch);}
 .api-bar input::placeholder{color:var(--text-dim);}
-.api-bar button{background:transparent;border:1px solid var(--ch);color:var(--ch);border-radius:8px;padding:.4rem .65rem;font-size:.68rem;cursor:pointer;white-space:nowrap;}
+.api-bar button{
+  background:var(--ch);color:#fff;border:none;
+  border-radius:8px;padding:.42rem .9rem;font-size:.7rem;
+  cursor:pointer;white-space:nowrap;font-family:'Noto Sans JP',sans-serif;
+  transition:opacity .15s;
+}
+.api-bar button:hover{opacity:.88;}
 
-.fetch-state{text-align:center;padding:2.5rem 1rem;}
-.fetch-avatar{font-size:2.5rem;display:block;animation:bob 1.5s ease-in-out infinite;margin-bottom:.6rem;}
-.fetch-state p{font-size:.8rem;color:var(--text-mid);margin-bottom:.25rem;}
-.fetch-state small{font-size:.62rem;color:var(--text-dim);}
-.dots-center{display:flex;gap:3px;justify-content:center;margin-top:.65rem;}
+/* TODAY SUMMARY CARD */
+.summary-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:1rem 1.1rem;margin-bottom:.9rem;
+  box-shadow:0 1px 8px rgba(0,0,0,.04);
+}
+.summary-header{
+  display:flex;align-items:center;gap:.5rem;
+  margin-bottom:.65rem;
+}
+.summary-header .label{
+  font-size:.6rem;letter-spacing:.12em;color:var(--ch);
+  font-weight:700;text-transform:uppercase;
+}
+.summary-date{font-size:.6rem;color:var(--text-dim);margin-left:auto;}
+.summary-lines{display:grid;gap:.35rem;}
+.summary-line{
+  display:flex;gap:.5rem;align-items:flex-start;
+  font-size:.78rem;line-height:1.55;color:var(--text-mid);
+}
+.summary-line::before{
+  content:'';width:4px;height:4px;border-radius:50%;
+  background:var(--ch);flex-shrink:0;margin-top:.45rem;
+  transition:background .4s;
+}
 
+/* CASTER VOICE */
+.caster-voice{
+  background:var(--ch-light);border:1px solid var(--ch-mid);border-radius:12px;
+  padding:.75rem .95rem;margin-bottom:.7rem;
+  display:flex;gap:.6rem;align-items:flex-start;
+  transition:background .4s,border-color .4s;
+}
+.caster-voice .av{font-size:1.3rem;flex-shrink:0;margin-top:1px;}
+.caster-voice .body{}
+.caster-voice .name{font-size:.6rem;font-weight:700;color:var(--ch);letter-spacing:.08em;margin-bottom:.2rem;}
+.caster-voice .line{font-size:.8rem;line-height:1.65;color:var(--text-mid);}
+
+/* NEWS HEADER ROW */
 .news-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
-.news-label{font-size:.62rem;letter-spacing:.1em;color:var(--text-dim);font-weight:700;text-transform:uppercase;}
-.refresh-btn{background:transparent;border:1px solid var(--border);border-radius:7px;padding:.22rem .55rem;font-size:.62rem;color:var(--text-dim);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all .15s;}
+.news-label{font-size:.6rem;letter-spacing:.1em;color:var(--text-dim);font-weight:700;text-transform:uppercase;}
+.refresh-btn{
+  background:transparent;border:1px solid var(--border);border-radius:7px;
+  padding:.22rem .55rem;font-size:.62rem;color:var(--text-dim);cursor:pointer;
+  font-family:'Noto Sans JP',sans-serif;transition:all .15s;
+}
 .refresh-btn:hover{border-color:var(--ch);color:var(--ch);}
 
+/* NEWS CARDS */
 .news-grid{display:grid;gap:.5rem;}
-.news-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.8rem .95rem;cursor:pointer;transition:all .18s;display:flex;gap:.7rem;align-items:flex-start;}
-.news-card:hover{border-color:var(--ch-mid);background:var(--ch-light);transform:translateX(2px);}
-.card-idx{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--ch);opacity:.5;min-width:18px;padding-top:1px;}
-.card-body{flex:1;}
-.card-title{font-size:.8rem;font-weight:700;line-height:1.45;color:var(--text);}
-.card-tags{margin-top:.28rem;display:flex;gap:.28rem;flex-wrap:wrap;}
-.tag{font-size:.56rem;padding:.1rem .4rem;border-radius:10px;border:1px solid var(--ch-mid);color:var(--ch);background:var(--ch-light);letter-spacing:.03em;}
-.card-src{font-size:.58rem;color:var(--text-dim);margin-top:.25rem;}
-.card-chevron{color:var(--text-dim);font-size:.78rem;align-self:center;}
+.news-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:.85rem 1rem;cursor:pointer;transition:all .18s;
+  display:flex;gap:.75rem;align-items:flex-start;
+}
+.news-card:hover{
+  border-color:var(--ch-mid);background:var(--ch-light);
+  transform:translateX(2px);
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+.card-idx{
+  font-family:'DM Mono',monospace;font-size:.7rem;
+  color:var(--ch);opacity:.45;min-width:18px;padding-top:2px;flex-shrink:0;
+}
+.card-body{flex:1;min-width:0;}
+.card-title{font-size:.82rem;font-weight:700;line-height:1.45;color:var(--text);margin-bottom:.3rem;}
+.card-why{font-size:.72rem;color:var(--text-mid);line-height:1.5;margin-bottom:.3rem;}
+.card-footer{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;}
+.tag{
+  font-size:.55rem;padding:.1rem .38rem;border-radius:9px;
+  border:1px solid var(--ch-mid);color:var(--ch);background:var(--ch-light);
+  letter-spacing:.03em;white-space:nowrap;
+}
+.card-src{font-size:.58rem;color:var(--text-dim);margin-left:auto;white-space:nowrap;}
+.card-chevron{color:var(--text-dim);font-size:.75rem;align-self:center;flex-shrink:0;}
 
-.echo-intro{background:var(--ch-light);border:1px solid var(--ch-mid);border-radius:12px;padding:.8rem .95rem;font-size:.8rem;line-height:1.75;margin-bottom:.7rem;transition:background .4s,border-color .4s;}
+/* FETCH STATE */
+.fetch-state{text-align:center;padding:2.5rem 1rem;}
+.fetch-av{font-size:2.8rem;display:block;animation:bob 1.5s ease-in-out infinite;margin-bottom:.7rem;}
+.fetch-state p{font-size:.82rem;color:var(--text-mid);}
+.fetch-state small{font-size:.62rem;color:var(--text-dim);display:block;margin-top:.3rem;}
 
+/* CHAT */
 .chat-area{display:flex;flex-direction:column;gap:.65rem;padding-bottom:.4rem;}
 .msg-row{display:flex;gap:.55rem;align-items:flex-start;animation:fadeUp .3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.msg-avatar{width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,var(--ch-mid),var(--ch));display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0;box-shadow:0 1px 5px rgba(0,0,0,.08);}
-.msg-bubble{background:var(--surface);border:1px solid var(--border);border-radius:3px 13px 13px 13px;padding:.65rem .85rem;font-size:.8rem;line-height:1.75;max-width:calc(100% - 38px);box-shadow:0 1px 4px rgba(0,0,0,.04);}
-.msg-bubble.hl{background:var(--ch-light);border-color:var(--ch-mid);}
+.msg-av{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--ch-mid),var(--ch));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;box-shadow:0 1px 5px rgba(0,0,0,.08);
+}
+.msg-bubble{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:3px 13px 13px 13px;padding:.65rem .88rem;
+  font-size:.8rem;line-height:1.75;max-width:calc(100% - 40px);
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.msg-bubble.hl{background:var(--ch-light);border-color:var(--ch-mid);font-weight:700;}
 .msg-row.user{flex-direction:row-reverse;}
-.msg-row.user .msg-bubble{background:var(--ch);color:#fff;border-color:transparent;border-radius:13px 3px 13px 13px;max-width:80%;}
+.msg-row.user .msg-bubble{
+  background:var(--ch);color:#fff;border-color:transparent;
+  border-radius:13px 3px 13px 13px;max-width:80%;
+}
 
-.input-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(245,243,238,.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:.6rem 1rem;z-index:100;}
+/* CHAT CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:.32rem;margin:.5rem 0 .75rem;}
+.chip{
+  background:var(--surface);border:1px solid var(--border);border-radius:18px;
+  padding:.26rem .62rem;font-size:.66rem;color:var(--text-mid);cursor:pointer;
+  font-family:'Noto Sans JP',sans-serif;transition:all .15s;
+}
+.chip:hover{background:var(--ch-light);border-color:var(--ch-mid);color:var(--ch);}
+
+/* INPUT */
+.input-wrap{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(245,243,238,.96);backdrop-filter:blur(12px);
+  border-top:1px solid var(--border);padding:.62rem 1rem;z-index:100;
+}
 .input-inner{max-width:620px;margin:0 auto;display:flex;gap:.4rem;align-items:flex-end;}
-.msg-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:.52rem .85rem;font-size:.8rem;font-family:'Noto Sans JP',sans-serif;color:var(--text);outline:none;resize:none;max-height:78px;transition:border-color .2s;line-height:1.5;}
+.msg-input{
+  flex:1;background:var(--surface);border:1px solid var(--border);
+  border-radius:13px;padding:.52rem .88rem;font-size:.8rem;
+  font-family:'Noto Sans JP',sans-serif;color:var(--text);
+  outline:none;resize:none;max-height:80px;transition:border-color .2s;line-height:1.5;
+}
 .msg-input:focus{border-color:var(--ch);}
 .msg-input::placeholder{color:var(--text-dim);}
-.send-btn{width:36px;height:36px;flex-shrink:0;border-radius:50%;border:none;background:var(--ch);color:#fff;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.12);transition:transform .15s;}
+.send-btn{
+  width:37px;height:37px;flex-shrink:0;border-radius:50%;border:none;
+  background:var(--ch);color:#fff;font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);transition:transform .15s,opacity .15s;
+}
 .send-btn:hover{transform:scale(1.08);}
 
+/* BACK BTN */
+.back-btn{
+  background:transparent;border:1px solid var(--border);border-radius:8px;
+  padding:.28rem .65rem;font-size:.65rem;color:var(--text-dim);cursor:pointer;
+  font-family:'Noto Sans JP',sans-serif;margin-bottom:.7rem;
+  transition:all .15s;display:inline-block;
+}
+.back-btn:hover{border-color:var(--ch);color:var(--ch);}
+
+/* DOTS */
 .dots{display:flex;gap:3px;padding:2px 0;}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--ch);opacity:.3;animation:dk 1.2s ease infinite;}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes dk{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.8;transform:scale(1.2)}}
+.dots-center{display:flex;gap:3px;justify-content:center;margin-top:.7rem;}
 
-.chips{display:flex;flex-wrap:wrap;gap:.32rem;margin:.45rem 0 .7rem;}
-.chip{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:.25rem .6rem;font-size:.66rem;color:var(--text-mid);cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all .15s;}
-.chip:hover{background:var(--ch-light);border-color:var(--ch-mid);color:var(--ch);}
+/* NOKEY / ERR */
+.nokey-box{
+  background:var(--ch-light);border:1px solid var(--ch-mid);border-radius:12px;
+  padding:.9rem 1rem;font-size:.8rem;line-height:1.7;color:var(--text-mid);
+}
+.err-box{
+  background:#fff5f5;border:1px solid #f8c0c0;border-radius:10px;
+  padding:.7rem .9rem;font-size:.76rem;color:#b83a3a;line-height:1.6;
+}
 
-.back-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:.28rem .65rem;font-size:.65rem;color:var(--text-dim);cursor:pointer;font-family:'Noto Sans JP',sans-serif;margin-bottom:.7rem;transition:all .15s;display:inline-block;}
-.back-btn:hover{border-color:var(--ch);color:var(--ch);}
-
-.err-box{background:#fff5f5;border:1px solid #f8c0c0;border-radius:10px;padding:.7rem .9rem;font-size:.76rem;color:#b83a3a;line-height:1.6;}
-.nokey-box{background:var(--ch-light);border:1px solid var(--ch-mid);border-radius:12px;padding:.9rem 1rem;font-size:.8rem;line-height:1.7;}
-
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;}
-.modal{background:var(--surface);border-radius:16px;padding:1.4rem;max-width:460px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15);}
-.modal h2{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--ch);margin-bottom:.85rem;}
-.modal p{font-size:.76rem;line-height:1.8;color:var(--text-mid);margin-bottom:.55rem;}
+/* MODAL */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:500;
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+}
+.modal{
+  background:var(--surface);border-radius:16px;padding:1.4rem;
+  max-width:460px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15);
+  max-height:90vh;overflow-y:auto;
+}
+.modal h2{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--ch);margin-bottom:.9rem;}
+.modal p{font-size:.76rem;line-height:1.85;color:var(--text-mid);margin-bottom:.55rem;}
 .modal p strong{color:var(--text);}
-.modal-close{width:100%;margin-top:.8rem;padding:.5rem;background:var(--ch);color:#fff;border:none;border-radius:9px;font-size:.76rem;cursor:pointer;font-family:'Noto Sans JP',sans-serif;}
+.modal-close{
+  width:100%;margin-top:.9rem;padding:.52rem;background:var(--ch);
+  color:#fff;border:none;border-radius:9px;font-size:.76rem;cursor:pointer;
+  font-family:'Noto Sans JP',sans-serif;
+}
+
+/* ONBOARD HINT */
+.onboard{
+  background:var(--surface);border:1px dashed var(--ch-mid);border-radius:12px;
+  padding:1rem 1.1rem;font-size:.78rem;line-height:1.7;color:var(--text-mid);
+  text-align:center;margin-bottom:.8rem;
+}
+.onboard strong{color:var(--ch);}
 </style>
 </head>
-<body data-ch="nikkei">
+<body data-ch="map">
 
+<!-- ===== HEADER ===== -->
 <header>
   <div class="header-top">
-    <div class="echo-avatar" id="echoAvatar">🦭</div>
+    <div class="cast-avatar" id="castAvatar">🦭</div>
     <div class="header-text">
-      <h1>みんなのAIニュース</h1>
-      <p id="chLabel">今日のAI · Echo</p>
+      <h1>AI News: <span id="chAccent">Three Surfers</span></h1>
+      <div class="header-tagline" id="chTagline">Sniffed it out for you. — 追いきれないAIニュースを、3つの視点で波乗りする。</div>
     </div>
     <div class="header-right">
-      <button class="policy-btn" onclick="showPolicy()">📋 取材ポリシー</button>
+      <button class="icon-btn" onclick="showPolicy()">📋 ポリシー</button>
     </div>
   </div>
   <div class="ch-tabs">
-    <div class="ch-tab active" data-ch="nikkei" onclick="switchCh('nikkei',this)">📰 今日のAI</div>
-    <div class="ch-tab" data-ch="tech"   onclick="switchCh('tech',this)">🛠️ ユーザーボイス</div>
-    <div class="ch-tab" data-ch="gossip" onclick="switchCh('gossip',this)">👀 御三家動向</div>
+    <div class="ch-tab active" data-ch="map"   onclick="switchCh('map',this)">🗺️ 今日のAI地図</div>
+    <div class="ch-tab"        data-ch="field" onclick="switchCh('field',this)">🛠️ 現場のAI</div>
+    <div class="ch-tab"        data-ch="agent" onclick="switchCh('agent',this)">⚡ エージェント戦線</div>
   </div>
 </header>
 
+<!-- MODE + REGION BAR -->
 <div class="sub-bar">
-  <button class="mode-btn active" id="m1btn" onclick="switchMode(1)">🗞️ ニュース説明</button>
-  <button class="mode-btn" id="m2btn" onclick="switchMode(2)">💬 深掘りチャット</button>
+  <button class="mode-btn active" id="m1btn" onclick="switchMode(1)">🗞️ ニュース</button>
+  <button class="mode-btn"        id="m2btn" onclick="switchMode(2)">💬 深掘りチャット</button>
   <div class="region-toggle">
     <button class="region-btn active" id="rWorld" onclick="switchRegion('world',this)">🌍 ワールド</button>
-    <button class="region-btn" id="rJapan" onclick="switchRegion('japan',this)">🇯🇵 日本</button>
+    <button class="region-btn"        id="rJapan" onclick="switchRegion('japan',this)">🇯🇵 日本</button>
   </div>
 </div>
 
 <main>
   <div class="api-bar">
-    <input type="password" id="apiKey" placeholder="sk-ant-... APIキーを入れると起動するよ">
-    <button onclick="saveKey()">保存して起動</button>
+    <input type="password" id="apiKey" placeholder="Anthropic API Key を入れると起動します">
+    <button onclick="saveKey()">起動</button>
   </div>
   <div id="content"></div>
 </main>
 
+<!-- INPUT -->
 <div class="input-wrap" id="inputWrap" style="display:none">
   <div class="input-inner">
     <textarea class="msg-input" id="msgInput" placeholder="なんでも聞いてね…" rows="1"
@@ -153,49 +337,77 @@ main{max-width:620px;margin:0 auto;padding:1rem 1rem 5rem;}
   </div>
 </div>
 
+<!-- POLICY MODAL -->
 <div class="modal-bg" id="policyModal" style="display:none" onclick="if(event.target.id==='policyModal')hidePolicy()">
   <div class="modal">
     <h2>📋 取材ポリシー</h2>
+    <p><strong>このアプリについて</strong><br>
+    AI業界の変化が速すぎて追いきれない人のために、3人のAIキャスターがニュースの波を拾い、会話できる話題に変える対話型AIニュースアプリです。</p>
     <p><strong>ニュースの取得方法</strong><br>
-    Anthropic Claude APIのweb search機能でリアルタイムに収集。チャンネルごとに検索クエリを変えて振り分けしているよ。</p>
+    Anthropic Claude APIのweb search機能を使い、チャンネルごとに最適化した検索クエリでリアルタイム収集しています。チャンネル切替・リージョン切替・更新ボタンのたびに再取得します。</p>
     <p><strong>情報源の傾向</strong><br>
-    英語・米国発が7〜8割（TechCrunch・Bloomberg・CNBC・Wiredなど）。🇯🇵 日本モードでは「日本・国内」クエリを追加して国内ニュースを優先する。それでも海外発が混ざることはある。</p>
-    <p><strong>更新タイミング</strong><br>
-    チャンネル・リージョン切替時、または「🔄 更新」ボタンを押したとき。AIが要約・整理しているので原文と若干ズレることも。感覚的な情報収集ツールとして使ってね。</p>
-    <p><strong>キャラクター</strong><br>
-    📰 Echo 🦭（今日のAI）/ 🛠️ Lucky 🦝（ユーザーボイス）/ 👀 Sonar 🐬（御三家動向）</p>
+    🌍ワールドモードは英語・米国発が7〜8割（TechCrunch・Wired・Bloomberg等）。🇯🇵日本モードは「日本・国内」クエリを追加して優先しますが、海外発が混ざることもあります。AIが要約・整理するため原文とズレる場合があります。</p>
+    <p><strong>3チャンネルの役割</strong><br>
+    🗺️ <strong>今日のAI地図（Echo）</strong>：業界全体・企業発表・規制・社会動向<br>
+    🛠️ <strong>現場のAI（Lucky）</strong>：実務活用・RPA・ノーコード・業務自動化<br>
+    ⚡ <strong>エージェント戦線（Sonar）</strong>：AIエージェント・MCP・SaaS組み込み・開発自動化</p>
+    <p><strong>キャラクター</strong><br>Echo 🦭 / Lucky 🦝 / Sonar 🐬 — AIニュースの波を乗りこなす3人のキャスター</p>
     <button class="modal-close" onclick="hidePolicy()">閉じる</button>
   </div>
 </div>
 
 <script>
+// ===== CONFIG =====
 const CFG = {
-  nikkei:{label:'今日のAI · Echo',  avatar:'🦭',name:'Echo',
-    intro:'探知したよ📡 今朝の<strong>ビジネス×AIトレンド</strong>をお届け。どれから聞く？',
-    role:'経済・ビジネス視点でAIニュースを解説する。格調高く、でも分かりやすく。',
-    qWorld:'AI artificial intelligence business economics latest news 2026 April',
-    qJapan:'AI 人工知能 ビジネス 経済 日本 国内 最新ニュース 2026年4月'},
-  tech:{label:'ユーザーボイス · Lucky',avatar:'🦝',name:'Lucky',
-    intro:'ラッキー探知！🦝 <strong>現場・ユーザーの声</strong>を集めてきたよ。どれ気になる？',
-    role:'AIを実際に使っているユーザーや現場の声・活用事例・使ってみた報告を親しみやすく伝える。',
-    qWorld:'AI user experience productivity real world use case how people use 2026',
-    qJapan:'AI 活用事例 使ってみた ユーザー 現場 業務効率 日本 2026年4月'},
-  gossip:{label:'御三家動向モード · Sonar',avatar:'🐬',name:'Sonar',
-    intro:'探知したよ👀 <strong>OpenAI・Anthropic・Google</strong>の最新動向、全部まとめてきた！',
-    role:'OpenAI・Anthropic・Google（御三家）の動向に特化して、面白く・人間臭く解説する。',
-    qWorld:'OpenAI Anthropic Google AI news latest April 2026',
-    qJapan:'OpenAI Anthropic Google AI 日本 動向 ニュース 2026年4月'}
+  map:{
+    accent:'今日のAI地図',
+    tagline:'AI業界全体の地図を、Echoが毎朝更新する。',
+    avatar:'🦭', name:'Echo',
+    voice:'今日のAI界隈、どこが動いたか地図にしておくね。',
+    role:'AI業界全体の動き・大手企業の発表・モデル更新・規制・社会影響・日本国内のAI政策や企業動向を、その日の「全体地図」として分かりやすく伝える。',
+    qWorld:'AI industry news latest models regulations enterprise 2026',
+    qJapan:'AI 人工知能 業界動向 企業発表 規制 日本 国内 2026年',
+    summary_q:'今日のAI業界の主要トピックを3行で要約してください。業界全体の動き・規制・企業動向を踏まえて。'
+  },
+  field:{
+    accent:'現場のAI',
+    tagline:'実務・現場での活用を、Luckyが拾い歩く。',
+    avatar:'🦝', name:'Lucky',
+    voice:'それ、実際の現場でどう使われているかを見に行くよ。',
+    role:'AIの実務活用・現場での使われ方・AIエージェントの実利用・ローコード/ノーコード・RPA連携・社内AI・議事録/資料作成/問い合わせ対応など「仕事にどう効くか」を伝える。',
+    qWorld:'AI workflow automation RPA low-code no-code productivity enterprise use case 2026',
+    qJapan:'AI 業務自動化 RPA ノーコード 活用事例 現場 生産性 日本 2026年',
+    summary_q:'今日のAI現場活用・業務自動化・RPA連携の主要動向を3行で。実務者視点で。'
+  },
+  agent:{
+    accent:'エージェント戦線',
+    tagline:'仕事の流れを変える信号を、Sonarが観測する。',
+    avatar:'🐬', name:'Sonar',
+    voice:'そのニュース、仕事の流れを変える信号かもしれないね。',
+    role:'AIエージェント・MCP/Skills/tools/API連携・SaaSへのAI組み込み・ブラウザ操作AI・AIによる開発/保守/テスト・"AIが仕事の流れを奪い始めている"領域の動向を観測して伝える。',
+    qWorld:'AI agent MCP tools API integration SaaS automation agentic workflows 2026',
+    qJapan:'AIエージェント MCP API連携 SaaS 自動化 開発 日本 2026年',
+    summary_q:'今日のAIエージェント・MCP・SaaS組み込みの最前線を3行で。仕事の流れへの影響を踏まえて。'
+  }
 };
 
-let ch='nikkei', mode=1, region='world';
-let apiKey=localStorage.getItem('minna_v2_key')||'';
-let chatHistory=[], fetchedNews=[], loading=false;
+const FOLLOW_CHIPS = [
+  'かんたんに説明して',
+  '仕事に関係ある？',
+  '学院で話すなら？',
+  'ちょっと批判的に見ると？',
+  'この流れ、今後どうなる？'
+];
+
+let ch='map', mode=1, region='world';
+let apiKey=localStorage.getItem('three_surfers_key')||'';
+let chatHistory=[], fetchedNews=[], todaySummary=[], loading=false;
 
 if(apiKey) document.getElementById('apiKey').value=apiKey;
 
 function saveKey(){
   apiKey=document.getElementById('apiKey').value.trim();
-  if(apiKey){localStorage.setItem('minna_v2_key',apiKey);fetchNews();}
+  if(apiKey){localStorage.setItem('three_surfers_key',apiKey);startAll();}
 }
 
 function switchCh(newCh,el){
@@ -203,46 +415,64 @@ function switchCh(newCh,el){
   document.querySelectorAll('.ch-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   const c=CFG[ch];
-  document.getElementById('chLabel').textContent=c.label;
-  document.getElementById('echoAvatar').textContent=c.avatar;
-  reset(); fetchNews();
+  document.getElementById('castAvatar').textContent=c.avatar;
+  document.getElementById('chAccent').textContent=c.accent;
+  document.getElementById('chTagline').textContent=c.tagline;
+  reset(); startAll();
 }
 function switchMode(m){
   mode=m;
   document.getElementById('m1btn').classList.toggle('active',m===1);
   document.getElementById('m2btn').classList.toggle('active',m===2);
-  chatHistory=[]; renderContent();
+  chatHistory=[];renderContent();
 }
 function switchRegion(r,el){
   region=r;
   document.getElementById('rWorld').classList.toggle('active',r==='world');
   document.getElementById('rJapan').classList.toggle('active',r==='japan');
-  reset(); fetchNews();
+  reset();startAll();
 }
-function reset(){chatHistory=[];fetchedNews=[];}
+function reset(){chatHistory=[];fetchedNews=[];todaySummary=[];}
 
-// ===== FETCH =====
-async function fetchNews(){
+// ===== FETCH ALL =====
+async function startAll(){
   if(!apiKey){renderNoKey();return;}
-  loading=true; renderFetching();
+  loading=true;renderFetching();
+  await fetchNews();
+  await fetchSummary();
+  loading=false;renderContent();
+}
+
+// ===== TODAY'S 3-LINE SUMMARY =====
+async function fetchSummary(){
+  const c=CFG[ch];
+  const regionHint=region==='japan'?'日本・国内視点で。':'グローバル視点で。';
+  const prompt=`${regionHint}${c.summary_q}\n3行で返してください。各行は「・」で始めてください。JSONや箇条書き記号は不要です。`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,
+        'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:500,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await res.json();
+    if(data.error)return;
+    const tb=data.content?.find(b=>b.type==='text');
+    const raw=tb?.text||'';
+    todaySummary=raw.split('\n').filter(l=>l.trim()).map(l=>l.replace(/^[・\-\*\s]+/,'').trim()).filter(Boolean).slice(0,3);
+  }catch(e){todaySummary=[];}
+}
+
+// ===== FETCH NEWS =====
+async function fetchNews(){
   const c=CFG[ch];
   const q=region==='japan'?c.qJapan:c.qWorld;
-  const regionHint=region==='japan'?'日本・国内のニュースを優先してください。':'グローバルのニュースを中心にしてください。';
-  const prompt=`${regionHint}
-以下の検索クエリで今日（2026年4月9日）のAIニュースを検索して、上位5件を日本語でまとめてください。タイトルは30字以内、bgは1文で簡潔に。
-
-検索クエリ: ${q}
-
-JSONのみ返してください（前置き・コードブロック不要）:
-[
-  {
-    "title": "日本語タイトル（50字以内）",
-    "tags": ["タグ1","タグ2"],
-    "bg": "背景・概要2〜3文",
-    "src": "情報源名（例: TechCrunch, NHK等）",
-    "age": "本日 or 1日前 など"
-  }
-]`;
+  const regionHint=region==='japan'?'日本・国内のニュースを優先して。':'グローバルのニュースを中心に。';
+  const prompt=`${regionHint}検索クエリ「${q}」で今日（2026年）のAIニュースを5件まとめてください。\n必須：各ニュースの"why"フィールドに「なぜ重要か・何が変わるか」を必ず20〜40字で記入してください。空にしないでください。\nJSONのみ返してください（前置き・コードブロック不要）:\n[{"title":"タイトル30字以内","tags":["タグ"],"why":"なぜ重要か20〜40字（必須）","src":"情報源名","age":"本日 or 1日前"}]`;
   const doFetch=async()=>{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -258,77 +488,96 @@ JSONのみ返してください（前置き・コードブロック不要）:
   };
   try{
     let data=await doFetch();
-    if(data.error&&data.error.message&&data.error.message.includes('rate limit')){
-      const el=document.querySelector('.fetch-state p');
-      if(el)el.textContent='レート制限中… 5秒後に再試行するよ';
+    if(data.error&&data.error.message?.includes('rate limit')){
       await new Promise(r=>setTimeout(r,5000));
       data=await doFetch();
     }
-    if(data.error){loading=false;renderErr(data.error.message);return;}
+    if(data.error){fetchedNews=[];return;}
     const tb=data.content?.find(b=>b.type==='text');
     const raw=tb?.text||'[]';
     try{
       const clean=raw.replace(/```json|```/g,'').trim();
       const arr=clean.match(/\[[\s\S]*\]/);
-      const jsonStr=arr?arr[0]:clean;
-      fetchedNews=JSON.parse(jsonStr);
+      fetchedNews=JSON.parse(arr?arr[0]:clean);
     }catch(pe){
       const hits=[...raw.matchAll(/"title"\s*:\s*"([^"]+)"/g)];
       fetchedNews=hits.length
-        ?hits.map(h=>({title:h[1],tags:['AI'],bg:'詳細はチャットで確認できます。',src:'web',age:'本日'}))
-        :[{title:'再読み込みを試してみてね 🔄',tags:['AI'],bg:'-',src:'-',age:'-'}];
+        ?hits.map(h=>({title:h[1],tags:['AI'],why:'',src:'web',age:'本日'}))
+        :[];
     }
-    loading=false; renderContent();
-  }catch(e){loading=false;renderErr(e.message);}
+  }catch(e){fetchedNews=[];}
 }
 
 // ===== RENDER =====
 function renderNoKey(){
   document.getElementById('inputWrap').style.display='none';
   document.getElementById('content').innerHTML=`
-    <div class="nokey-box">
-      <span style="font-size:1.1rem;margin-right:6px;">${CFG[ch].avatar}</span>
-      上のAPIキーを入れてくれたら起動するよ！localStorageに保存されるので次回以降は自動で読み込まれます。
+    <div class="onboard">
+      <div style="font-size:1.8rem;margin-bottom:.5rem;">🦭🦝🐬</div>
+      <strong>AI News: Three Surfers</strong><br>
+      追いきれないAIニュースを、3人のキャスターが波乗りします。<br>
+      上のAPIキーを入れると起動します。
     </div>`;
 }
+
 function renderFetching(){
   document.getElementById('inputWrap').style.display='none';
   const c=CFG[ch];
   const rl=region==='japan'?'🇯🇵 日本のニュースを':'🌍 世界のニュースを';
   document.getElementById('content').innerHTML=`
     <div class="fetch-state">
-      <span class="fetch-avatar">${c.avatar}</span>
+      <span class="fetch-av">${c.avatar}</span>
       <p>${rl}探知中…</p>
-      <small>web searchでリアルタイム収集しているよ</small>
+      <small>web searchでリアルタイム収集しています</small>
       <div class="dots-center">
         <div class="dot"></div><div class="dot"></div><div class="dot"></div>
       </div>
     </div>`;
 }
-function renderErr(msg){
-  document.getElementById('inputWrap').style.display='none';
-  document.getElementById('content').innerHTML=`
-    <div class="err-box">⚠️ 取得エラー: ${esc(msg)}<br>
-    <small style="margin-top:.3rem;display:block;">APIキーを確認するか、しばらくしてからもう一度試してみてね。</small></div>`;
-}
 
 function renderContent(){
   if(loading){renderFetching();return;}
   if(!apiKey){renderNoKey();return;}
-  if(!fetchedNews.length){fetchNews();return;}
+  if(!fetchedNews.length){startAll();return;}
   const c=CFG[ch];
   const rl=region==='japan'?'🇯🇵 日本':'🌍 ワールド';
   const dateStr=new Date().toLocaleDateString('ja-JP',{month:'short',day:'numeric'});
 
   if(mode===1){
     document.getElementById('inputWrap').style.display='none';
-    document.getElementById('content').innerHTML=`
-      <div class="echo-intro"><span style="font-size:1.05rem;margin-right:5px;">${c.avatar}</span>${c.intro}</div>
-      <div class="news-header">
-        <span class="news-label">${rl} · ${dateStr} 最新</span>
-        <button class="refresh-btn" onclick="reset();fetchNews()">🔄 更新</button>
+    let html='';
+
+    // TODAY SUMMARY
+    if(todaySummary.length){
+      html+=`<div class="summary-card">
+        <div class="summary-header">
+          <span class="label">📍 今日の3行まとめ</span>
+          <span class="summary-date">${dateStr} ${rl}</span>
+        </div>
+        <div class="summary-lines">
+          ${todaySummary.map(l=>`<div class="summary-line">${esc(l)}</div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    // CASTER VOICE
+    html+=`<div class="caster-voice">
+      <div class="av">${c.avatar}</div>
+      <div class="body">
+        <div class="name">${c.name}</div>
+        <div class="line">${c.voice}</div>
       </div>
-      <div class="news-grid" id="ng"></div>`;
+    </div>`;
+
+    // NEWS LIST
+    html+=`<div class="news-header">
+      <span class="news-label">最新 ${fetchedNews.length}件</span>
+      <button class="refresh-btn" onclick="reset();startAll()">🔄 更新</button>
+    </div>
+    <div class="news-grid" id="ng"></div>`;
+
+    document.getElementById('content').innerHTML=html;
+
     const ng=document.getElementById('ng');
     fetchedNews.forEach((n,i)=>{
       const d=document.createElement('div');d.className='news-card';
@@ -336,30 +585,49 @@ function renderContent(){
         <div class="card-idx">${i+1}</div>
         <div class="card-body">
           <div class="card-title">${esc(n.title)}</div>
-          <div class="card-tags">${(n.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
-          <div class="card-src">${esc(n.src||'')}${n.age?' · '+esc(n.age):''}</div>
+          ${n.why?`<div class="card-why">→ ${esc(n.why)}</div>`:''}
+          <div class="card-footer">
+            ${(n.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
+            <span class="card-src">${esc(n.src||'')}${n.age?' · '+esc(n.age):''}</span>
+          </div>
         </div>
         <div class="card-chevron">›</div>`;
       d.onclick=()=>explainNews(n);
       ng.appendChild(d);
     });
+
   } else {
+    // MODE 2: CHAT
     document.getElementById('inputWrap').style.display='block';
-    document.getElementById('content').innerHTML=`
-      <div class="echo-intro"><span style="font-size:1.05rem;margin-right:5px;">${c.avatar}</span>なんでも聞いて！ニュースの深掘り・背景・意見交換、なんでもOK。</div>
-      <div class="chips" id="qc"></div>
-      <div class="chat-area" id="chatArea"></div>`;
+    let html=`<div class="caster-voice">
+      <div class="av">${c.avatar}</div>
+      <div class="body">
+        <div class="name">${c.name}</div>
+        <div class="line">なんでも聞いて！深掘り・背景・意見交換、なんでもOK。</div>
+      </div>
+    </div>
+    <div class="chips" id="qc"></div>
+    <div class="chat-area" id="chatArea"></div>`;
+    document.getElementById('content').innerHTML=html;
+
+    // Quick chips from news + standard follow-ups
     const qc=document.getElementById('qc');
-    fetchedNews.slice(0,3).forEach(n=>{
+    fetchedNews.slice(0,2).forEach(n=>{
       const chip=document.createElement('div');chip.className='chip';
-      chip.textContent=`「${n.title.substring(0,16)}…」`;
+      chip.textContent=`「${n.title.substring(0,14)}…」`;
       chip.onclick=()=>{document.getElementById('msgInput').value=`「${n.title}」について教えて`;sendMsg();};
+      qc.appendChild(chip);
+    });
+    FOLLOW_CHIPS.forEach(t=>{
+      const chip=document.createElement('div');chip.className='chip';
+      chip.textContent=t;
+      chip.onclick=()=>{document.getElementById('msgInput').value=t;sendMsg();};
       qc.appendChild(chip);
     });
   }
 }
 
-// ===== EXPLAIN (mode1) =====
+// ===== EXPLAIN =====
 async function explainNews(news){
   const c=CFG[ch];
   document.getElementById('inputWrap').style.display='block';
@@ -367,23 +635,23 @@ async function explainNews(news){
     <button class="back-btn" onclick="renderContent()">← 一覧に戻る</button>
     <div class="chat-area" id="chatArea">
       <div class="msg-row">
-        <div class="msg-avatar">${c.avatar}</div>
-        <div class="msg-bubble hl" style="font-weight:700;">📡 ${esc(news.title)}</div>
+        <div class="msg-av">${c.avatar}</div>
+        <div class="msg-bubble hl">📡 ${esc(news.title)}</div>
       </div>
     </div>`;
   addLoading();
-  const um=`以下のニュースを「そもそも何？」から説明して。背景→意義→キャスター目線のポイントで280〜380字。\n\nタイトル:${news.title}\n背景:${news.bg}`;
+  const um=`以下のニュースを「そもそも何？」から解説して。\n背景→なぜ重要か→${c.name}目線でのポイント、の流れで280〜350字で。\n\nタイトル:${news.title}\nなぜ重要:${news.why||''}`;
   chatHistory=[{role:'user',content:um}];
-  await call(sys(),[...chatHistory],t=>{
+  await call(buildSys(),[...chatHistory],t=>{
     chatHistory.push({role:'assistant',content:t});
-    rmLoad(); addEcho(t); addFollowChips();
+    rmLoad();addEcho(t);addFollowChips();
   });
 }
 
 function addFollowChips(){
   const a=document.getElementById('chatArea');if(!a)return;
   const d=document.createElement('div');d.className='chips';d.style.marginTop='.2rem';
-  ['もっと深掘りして','キャスター的にどう使う？','視聴者にはこう伝えると？'].forEach(t=>{
+  FOLLOW_CHIPS.forEach(t=>{
     const c=document.createElement('div');c.className='chip';c.textContent=t;
     c.onclick=()=>{document.getElementById('msgInput').value=t;sendMsg();};
     d.appendChild(c);
@@ -399,27 +667,29 @@ async function sendMsg(){
   if(!document.getElementById('chatArea')){
     document.getElementById('content').innerHTML+=`<div class="chat-area" id="chatArea"></div>`;
   }
-  addUser(txt); addLoading();
+  addUser(txt);addLoading();
   chatHistory.push({role:'user',content:txt});
-  await call(sys(),[...chatHistory],r=>{
+  await call(buildSys(),[...chatHistory],r=>{
     chatHistory.push({role:'assistant',content:r});
-    rmLoad(); addEcho(r);
+    rmLoad();addEcho(r);
   });
   scrollB();
 }
 
-function sys(){
+function buildSys(){
   const c=CFG[ch];
   const rctx=region==='japan'?'日本・国内視点を重視して。':'グローバル視点で。';
-  const nl=fetchedNews.length?`今日のニュース:\n${fetchedNews.map((n,i)=>`${i+1}.${n.title}`).join('\n')}`:'';
-  return `あなたはAIニュース解説AI「${c.name}」（${c.avatar}）。セナリ学院キャスターの相方として動く。
-口調：フラットで親しみやすく、難しい言葉は使わない。
+  const nl=fetchedNews.length?`\n今日のニュース:\n${fetchedNews.map((n,i)=>`${i+1}. ${n.title}`).join('\n')}`:'';
+  return `あなたはAIニュースキャスター「${c.name}」（${c.avatar}）。
+セナリ学院のAIニュース番組のキャスターとして、視聴者と対話する。
 専門：${c.role}
 地域：${rctx}
-現在：2026年4月9日朝。${nl}
+現在：2026年4月9日。${nl}
+口調：フラットで親しみやすく、難しい言葉は使わない。
 重要：台本は書かない。対話でリアルタイムに届ける。300字前後でコンパクトに。`;
 }
 
+// ===== API =====
 async function call(system,messages,onDone){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
@@ -434,7 +704,7 @@ async function call(system,messages,onDone){
   }catch(e){rmLoad();addEcho('⚠️ 通信エラー: '+e.message);}
 }
 
-// ===== UI =====
+// ===== UI HELPERS =====
 function addUser(txt){
   const a=document.getElementById('chatArea');if(!a)return;
   const r=document.createElement('div');r.className='msg-row user';
@@ -445,26 +715,27 @@ function addEcho(txt){
   const a=document.getElementById('chatArea');if(!a)return;
   const c=CFG[ch];
   const r=document.createElement('div');r.className='msg-row';
-  r.innerHTML=`<div class="msg-avatar">${c.avatar}</div><div class="msg-bubble">${txt.replace(/\n/g,'<br>')}</div>`;
+  r.innerHTML=`<div class="msg-av">${c.avatar}</div><div class="msg-bubble">${txt.replace(/\n/g,'<br>')}</div>`;
   a.appendChild(r);scrollB();
 }
 function addLoading(){
   const a=document.getElementById('chatArea');if(!a)return;
   const c=CFG[ch];
   const r=document.createElement('div');r.className='msg-row';r.id='lr';
-  r.innerHTML=`<div class="msg-avatar">${c.avatar}</div><div class="msg-bubble"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+  r.innerHTML=`<div class="msg-av">${c.avatar}</div><div class="msg-bubble"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
   a.appendChild(r);scrollB();
 }
 function rmLoad(){document.getElementById('lr')?.remove();}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function scrollB(){window.scrollTo(0,document.body.scrollHeight);}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,78)+'px';}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,80)+'px';}
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 function showPolicy(){document.getElementById('policyModal').style.display='flex';}
 function hidePolicy(){document.getElementById('policyModal').style.display='none';}
 
+// ===== INIT =====
 document.body.dataset.ch=ch;
-if(apiKey) fetchNews(); else renderNoKey();
+if(apiKey) startAll(); else renderNoKey();
 </script>
 </body>
 </html>
